@@ -1,0 +1,39 @@
+WebSequenceDiagrams code for these diagrams. The code is here just in case I want to redraw them.
+
+--
+
+title Adding a note
+
+browser-> server: HTTP POST /new_note
+note right of browser: form content
+note left of server: server code adds note to json?
+server-->browser: 302 Found
+note left of server: Redirect to /notes
+browser->server: HTTP GET /notes
+note right of browser: Continue as in material example
+
+--
+
+title Loading the SPA version of the page
+
+browser-> server: HTTP GET /spa
+server-->browser: spa.html
+browser->server: HTTP GET main.css
+server-->browser: main.css
+browser->server: HTTP GET spa.js
+server-->browser: spa.js
+note over browser: browser runs spa.js, which gets json
+browser->server: HTTP GET /data.json
+server-->browser: data.json
+note right of server: data.json contains the notes
+note over browser: browser runs OnReadyStatechange event handler which redraws notes
+
+--
+
+title Adding a note with the SPA version
+browser
+note over browser: js code on browser makes POST request
+browser-> server: HTTP POST /new_note_spa
+note right of server: contains new note in json format
+server-->browser: 302 Created
+note over browser: OnSubmit event handler redraws notes
