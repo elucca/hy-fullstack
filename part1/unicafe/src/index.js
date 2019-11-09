@@ -20,7 +20,6 @@ const App = () => {
                 </div>
             </div>
 
-
             <div>
                 <div>
                     <Title text="Statistics" />
@@ -54,6 +53,12 @@ const Statistics = ({ goods, neutrals, bads }) => {
             <p>Good: {goods}</p>
             <p>Neutral: {neutrals}</p>
             <p>Bad: {bads}</p>
+
+            <br></br>
+
+            <p>Total: {counts(goods, neutrals, bads)}</p>
+            <p>Average: {average(goods, neutrals, bads)}</p>
+            <p>Positive: {positivePercentage(goods, neutrals, bads)}%</p>
         </>
     )
 }
@@ -62,6 +67,27 @@ const setStateToValue = (setValue, newValue) => {
     // I think this re-renders App (and hence everything) cause
     // the state is defined in the App component?
     setValue(newValue)
+}
+
+const counts = (goods, neutrals, bads) => {
+    return goods + neutrals + bads
+}
+
+const average = (goods, neutrals, bads) => {
+    let count = counts(goods, neutrals, bads)
+    let sum = goods - bads
+    if (count === 0) {
+        return 0;
+    }
+    return sum / count
+}
+
+const positivePercentage = (goods, neutrals, bads) => {
+    let count = counts(goods, neutrals, bads)
+    if (count === 0) {
+        return 0;
+    }
+    return (goods / count) * 100
 }
 
 ReactDOM.render(<App />, document.getElementById('root'));
