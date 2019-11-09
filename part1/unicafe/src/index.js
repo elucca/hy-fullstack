@@ -46,13 +46,13 @@ const Statistics = ({ goods, neutrals, bads }) => {
     if (counts(goods, neutrals, bads) === 0) {
         return (
             <>
-            <div>
-                <Title text="Statistics" />
-            </div>
-            
-            <div>
-                <p>No feedback given.</p>
-            </div>
+                <div>
+                    <Title text="Statistics" />
+                </div>
+
+                <div>
+                    <p>No feedback given.</p>
+                </div>
             </>
         )
     }
@@ -64,18 +64,23 @@ const Statistics = ({ goods, neutrals, bads }) => {
             </div>
 
             <div>
-
-                <p>Good: {goods}</p>
-                <p>Neutral: {neutrals}</p>
-                <p>Bad: {bads}</p>
+                <Statistic text="Good: " value={goods} />
+                <Statistic text="Neutral: " value={neutrals} />
+                <Statistic text="Bad: " value={bads} />
 
                 <br></br>
 
-                <p>Total: {counts(goods, neutrals, bads)}</p>
-                <p>Average: {average(goods, neutrals, bads)}</p>
-                <p>Positive: {positivePercentage(goods, neutrals, bads)}%</p>
+                <Statistic text="Total: " value={counts(goods, neutrals, bads)} />
+                <Statistic text="Average: " value={average(goods, neutrals, bads)} />
+                <Statistic text="Positive: " value={positivePercentage(goods, neutrals, bads)} />
             </div>
         </>
+    )
+}
+
+const Statistic = ({ text, value }) => {
+    return (
+        <p>{text}: {value}</p>
     )
 }
 
@@ -103,7 +108,8 @@ const positivePercentage = (goods, neutrals, bads) => {
     if (count === 0) {
         return 0;
     }
-    return (goods / count) * 100
+
+    return (goods / count) * 100 + "%"
 }
 
 ReactDOM.render(<App />, document.getElementById('root'));
