@@ -63,24 +63,26 @@ const Statistics = ({ goods, neutrals, bads }) => {
                 <Title text="Statistics" />
             </div>
 
-            <div>
-                <Statistic text="Good: " value={goods} />
-                <Statistic text="Neutral: " value={neutrals} />
-                <Statistic text="Bad: " value={bads} />
-
-                <br></br>
-
-                <Statistic text="Total: " value={counts(goods, neutrals, bads)} />
-                <Statistic text="Average: " value={average(goods, neutrals, bads)} />
-                <Statistic text="Positive: " value={positivePercentage(goods, neutrals, bads)} />
-            </div>
+            <table>
+                <tbody>
+                    <Statistic text="Good: " value={goods} />
+                    <Statistic text="Neutral: " value={neutrals} />
+                    <Statistic text="Bad: " value={bads} />
+                    <Statistic text="Total: " value={counts(goods, neutrals, bads)} />
+                    <Statistic text="Average: " value={average(goods, neutrals, bads)} />
+                    <Statistic text="Positive: " value={positivePercentage(goods, neutrals, bads)} />
+                </tbody>
+            </table>
         </>
     )
 }
 
 const Statistic = ({ text, value }) => {
     return (
-        <p>{text}: {value}</p>
+        <tr>
+            <td>{text}</td>
+            <td>{value}</td>
+        </tr>
     )
 }
 
