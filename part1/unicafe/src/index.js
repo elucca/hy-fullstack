@@ -20,14 +20,9 @@ const App = () => {
                 </div>
             </div>
 
-            <div>
-                <div>
-                    <Title text="Statistics" />
-                </div>
 
-                <div>
-                    <Statistics goods={good} neutrals={neutral} bads={bad} />
-                </div>
+            <div>
+                <Statistics goods={good} neutrals={neutral} bads={bad} />
             </div>
         </div>
     )
@@ -48,17 +43,38 @@ const Button = ({ name, setValue, currValue }) => {
 }
 
 const Statistics = ({ goods, neutrals, bads }) => {
+    if (counts(goods, neutrals, bads) === 0) {
+        return (
+            <>
+            <div>
+                <Title text="Statistics" />
+            </div>
+            
+            <div>
+                <p>No feedback given.</p>
+            </div>
+            </>
+        )
+    }
+
     return (
         <>
-            <p>Good: {goods}</p>
-            <p>Neutral: {neutrals}</p>
-            <p>Bad: {bads}</p>
+            <div>
+                <Title text="Statistics" />
+            </div>
 
-            <br></br>
+            <div>
 
-            <p>Total: {counts(goods, neutrals, bads)}</p>
-            <p>Average: {average(goods, neutrals, bads)}</p>
-            <p>Positive: {positivePercentage(goods, neutrals, bads)}%</p>
+                <p>Good: {goods}</p>
+                <p>Neutral: {neutrals}</p>
+                <p>Bad: {bads}</p>
+
+                <br></br>
+
+                <p>Total: {counts(goods, neutrals, bads)}</p>
+                <p>Average: {average(goods, neutrals, bads)}</p>
+                <p>Positive: {positivePercentage(goods, neutrals, bads)}%</p>
+            </div>
         </>
     )
 }
