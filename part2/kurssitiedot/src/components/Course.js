@@ -5,11 +5,11 @@ import Total from './Total'
 
 const Course = ({ course }) => {
     return (
-        <div>
+        <li>
             <Header course={course.name} />
             <Content name={course.name} parts={course.parts} />
             <Total course={course} />
-        </div>
+        </li>
     )
 }
 
