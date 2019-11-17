@@ -2,7 +2,7 @@ import React from 'react'
 import Part from './Part'
 
 const Content = ({ parts }) => {
-    const rows = () => parts.map(part =>
+    const rows = parts.map(part =>
         <Part
             key={part.id}
             part={part}
@@ -12,7 +12,7 @@ const Content = ({ parts }) => {
     return (
         <div>
             <ul>
-                {rows()}
+                {rows}
             </ul>
         </div>
     )
