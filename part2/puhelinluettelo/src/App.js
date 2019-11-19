@@ -9,6 +9,12 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault()
+
+    if (numbersListContains(newName)) {
+      alert(`The phonebook already includes ${newName}.`)
+      return
+    }
+
     const newPerson = {
       name: newName
     }
@@ -19,6 +25,10 @@ const App = () => {
 
   const handleNameChange = (event) => {
     setNewName(event.target.value)
+  }
+
+  const numbersListContains = (name) => {
+    return persons.filter(person => person.name === newName).length > 0
   }
 
   return (
