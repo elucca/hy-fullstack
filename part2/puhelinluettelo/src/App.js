@@ -6,6 +6,7 @@ const App = () => {
     { name: 'Arto Hellas' }
   ])
   const [newName, setNewName] = useState('')
+  const [newNumber, setNewNumber] = useState('')
 
   const addPerson = (event) => {
     event.preventDefault()
@@ -16,7 +17,8 @@ const App = () => {
     }
 
     const newPerson = {
-      name: newName
+      name: newName,
+      number: newNumber
     }
 
     setPersons(persons.concat(newPerson))
@@ -25,6 +27,10 @@ const App = () => {
 
   const handleNameChange = (event) => {
     setNewName(event.target.value)
+  }
+
+  const handleNumberChange = (event) => {
+    setNewNumber(event.target.value)
   }
 
   const numbersListContains = (name) => {
@@ -37,11 +43,22 @@ const App = () => {
 
       <form onSubmit={addPerson}>
         <div>
-          name:
+
+          <div>
+            name:
           <input
-            value={newName}
-            onChange={handleNameChange}
-          />
+              value={newName}
+              onChange={handleNameChange}
+            />
+          </div>
+
+          <div>number:
+            <input
+              value={newNumber}
+              onChange={handleNumberChange}
+            />
+          </div>
+
         </div>
         <div>
           <button type="submit">add</button>
