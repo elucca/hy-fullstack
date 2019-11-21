@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import NumbersList from './components/NumbersList'
 import FilterInput from './components/FilterInput'
 import PersonForm from './components/PersonForm'
