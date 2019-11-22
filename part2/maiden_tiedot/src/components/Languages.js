@@ -13,8 +13,6 @@ const Languages = ({ country }) => {
             <ul>
                 {rows}
             </ul>
-
-            <img src={country.flag} alt={'Flag'} />
         </div>
     )
 }
