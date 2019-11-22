@@ -2,7 +2,7 @@ import React from 'react'
 
 import Country from './Country'
 
-const CountryList = ({ countries, searchFilter }) => {
+const CountryList = ({ countries, searchFilter, countryToShow, handleSetCountryToShowChange }) => {
 
   const showCountry = (name) => {
     if (name.toLowerCase().includes(searchFilter.toLowerCase())) {
@@ -17,11 +17,10 @@ const CountryList = ({ countries, searchFilter }) => {
 
   let rowsToShow = countriesToShow()
 
-  if (rowsToShow.length === 1) {
+  if (countryToShow !== '') {
+    let country = rowsToShow.find(country => country.alpha3Code === countryToShow)
     return (
-      rowsToShow.map(country =>
-        <Country key={country.alpha3Code} country={country} showDetailed={true} />
-      )
+      <Country key={country.alpha3Code} country={country} showDetailed={true} />
     )
   }
 
@@ -34,7 +33,9 @@ const CountryList = ({ countries, searchFilter }) => {
   }
 
   const rows = rowsToShow.map(country =>
-    <Country key={country.alpha3Code} country={country} showDetailed={false} />
+    <Country key={country.alpha3Code} country={country}
+      handleSetCountryToShowChange={handleSetCountryToShowChange}
+      showDetailed={false} />
   )
 
   return (

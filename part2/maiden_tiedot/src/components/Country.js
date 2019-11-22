@@ -1,7 +1,7 @@
 import React from 'react'
 import Languages from './Languages'
 
-const Country = ({ country, showDetailed }) => {
+const Country = ({ country, handleSetCountryToShowChange, showDetailed }) => {
   if (showDetailed) {
     return (
       <div>
@@ -19,7 +19,10 @@ const Country = ({ country, showDetailed }) => {
 
   return (
     <li>
-      {country.name}
+      {country.name}&nbsp;
+      <button name={country.alpha3Code} onClick={() => handleSetCountryToShowChange(country.alpha3Code)}>
+        show
+      </button>
     </li>
   )
 

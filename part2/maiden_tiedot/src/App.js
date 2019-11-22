@@ -7,6 +7,9 @@ import CountryList from './components/CountryList';
 function App() {
   const [countries, setCountries] = useState([])
   const [searchFilter, setSearchFilter] = useState('')
+  // If countryToShow is not empty, show information for that country rather than the
+  // full country list.
+  const [countryToShow, setCountryToShow] = useState('')
 
   useEffect(() => {
     axios
@@ -17,7 +20,12 @@ function App() {
   }, [])
 
   const handleSearchFilterChange = (event) => {
+    setCountryToShow('')
     setSearchFilter(event.target.value)
+  }
+
+  const handleSetCountryToShowChange = (alpha3Code) => {
+    setCountryToShow(alpha3Code);
   }
 
   return (
@@ -25,7 +33,10 @@ function App() {
       <FilterInput searchFilter={searchFilter}
         handleSearchFilterChange={handleSearchFilterChange}
       />
-      <CountryList countries={countries} searchFilter={searchFilter} />
+      <CountryList countries={countries} searchFilter={searchFilter}
+        countryToShow={countryToShow}
+        handleSetCountryToShowChange={handleSetCountryToShowChange}
+      />
     </div>
   );
 }
