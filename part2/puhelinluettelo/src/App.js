@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 
-import NumbersList from './components/NumbersList'
+import PersonsList from './components/PersonsList'
 import FilterInput from './components/FilterInput'
 import PersonForm from './components/PersonForm'
+import personService from './services/persons'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -12,17 +13,16 @@ const App = () => {
   const [searchFilter, setNewSearchFilter] = useState('')
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        setPersons(response.data)
+    personService.getAll()
+      .then(returnedPersons => {
+        setPersons(returnedPersons)
       })
   }, [])
 
   const addPerson = (event) => {
     event.preventDefault()
 
-    if (numbersListContains(newName)) {
+    if (personsListContains(newName)) {
       alert(`The phonebook already includes ${newName}.`)
       return
     }
@@ -32,10 +32,9 @@ const App = () => {
       number: newNumber
     }
 
-    axios
-      .post('http://localhost:3001/persons', newPerson)
-      .then(response => {
-        setPersons(persons.concat(response.data))
+    personService.create(newPerson)
+      .then(createdPerson => {
+        setPersons(persons.concat(createdPerson))
         setNewName('')
         setNewNumber('')
       })
@@ -53,8 +52,8 @@ const App = () => {
     setNewSearchFilter(event.target.value)
   }
 
-  const numbersListContains = (name) => {
-    return persons.filter(person => person.name === newName).length > 0
+  const personsListContains = (name) => {
+    return persons.filter(person => person.name.toLowerCase() === newName.toLowerCase()).length > 0
   }
 
   return (
@@ -74,7 +73,7 @@ const App = () => {
       />
 
       <h2>Numbers</h2>
-      < NumbersList persons={persons} searchFilter={searchFilter} />
+      < PersonsList persons={persons} searchFilter={searchFilter} />
 
     </div >
   )
