@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
 
 import PersonsList from './components/PersonsList'
 import FilterInput from './components/FilterInput'
@@ -40,6 +39,15 @@ const App = () => {
       })
   }
 
+  const removePerson = (person) => {
+    let choice = window.confirm(`Are you sure you want to remove ${person.name}?`)
+
+    if (choice) {
+      personService.remove(person)
+      .then(setPersons(persons.filter(p => p.name !== person.name)))
+    }
+  }
+
   const handleNameChange = (event) => {
     setNewName(event.target.value)
   }
@@ -73,10 +81,10 @@ const App = () => {
       />
 
       <h2>Numbers</h2>
-      < PersonsList persons={persons} searchFilter={searchFilter} />
+      < PersonsList persons={persons} searchFilter={searchFilter} removePerson={removePerson} />
 
     </div >
-  )
-}
-
-export default App
+    )
+  }
+  
+  export default App

@@ -1,7 +1,7 @@
 import React from 'react'
 import Person from './Person'
 
-const NumbersList = ({ persons, searchFilter }) => {
+const NumbersList = ({ persons, searchFilter, removePerson }) => {
   const personsToShow = () => {
     return persons.filter(person => showPerson(person.name) === true)
   }
@@ -17,6 +17,7 @@ const NumbersList = ({ persons, searchFilter }) => {
     <Person
       key={person.name}
       person={person}
+      removePerson={removePerson}
     />
   )
 
