@@ -21,14 +21,17 @@ const App = () => {
   const addPerson = (event) => {
     event.preventDefault()
 
-    if (personsListContains(newName)) {
-      alert(`The phonebook already includes ${newName}.`)
-      return
-    }
-
     const newPerson = {
       name: newName,
       number: newNumber
+    }
+
+    if (personsListContains(newName)) {
+      let choice = window.confirm(`The phonebook already includes ${newName}. Replace the old number with the new one?`)
+      if (choice) {
+        updateNumber(newPerson)
+      }
+      return
     }
 
     personService.create(newPerson)
@@ -44,7 +47,17 @@ const App = () => {
 
     if (choice) {
       personService.remove(person)
-      .then(setPersons(persons.filter(p => p.name !== person.name)))
+        .then(setPersons(persons.filter(p => p.name !== person.name)))
+    }
+  }
+
+  const updateNumber = (updatedPerson) => {
+    let toUpdate = persons.find(p => p.name.toLowerCase() === updatedPerson.name.toLowerCase())
+
+    if (toUpdate) {
+      personService.replaceWith(updatedPerson)
+        .then(setPersons(persons.map(p => p.name === toUpdate.name ? updatedPerson : p))
+        )
     }
   }
 
@@ -84,7 +97,7 @@ const App = () => {
       < PersonsList persons={persons} searchFilter={searchFilter} removePerson={removePerson} />
 
     </div >
-    )
-  }
-  
-  export default App
+  )
+}
+
+export default App

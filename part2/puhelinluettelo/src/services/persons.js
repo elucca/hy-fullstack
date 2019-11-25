@@ -12,12 +12,29 @@ const getAll = () => {
 }
 
 const remove = (person) => {
-    const request = axios.delete(baseUrl + `/${person.id}`)
+    const request = axios.delete(`${baseUrl}/${person.id}`)
     return request.then(response => response.data)
+}
+
+const getByName = (person) => {
+    return getAll().then(persons => {
+        return persons.filter(p => p.name === person.name)
+    })
+}
+
+const replaceWith = (person) => {
+    console.log(person.number)
+    return getByName(person).then(persons => {
+        const request = axios.put(`${baseUrl}/${persons[0].id}`, person)
+        return request.then(response => {
+            return response.data
+        })
+    })
 }
 
 export default {
     create,
     getAll,
-    remove
+    remove,
+    replaceWith
 }
