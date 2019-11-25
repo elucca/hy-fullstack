@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react'
 import PersonsList from './components/PersonsList'
 import FilterInput from './components/FilterInput'
 import PersonForm from './components/PersonForm'
+import Notification from './components/Notification'
+
 import personService from './services/persons'
 
 const App = () => {
@@ -10,6 +12,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [searchFilter, setNewSearchFilter] = useState('')
+  const [notification, setNotification] = useState(null)
 
   useEffect(() => {
     personService.getAll()
@@ -39,6 +42,8 @@ const App = () => {
         setPersons(persons.concat(createdPerson))
         setNewName('')
         setNewNumber('')
+
+        notify(`Added ${newPerson.name}.`, 2500)
       })
   }
 
@@ -48,6 +53,8 @@ const App = () => {
     if (choice) {
       personService.remove(person)
         .then(setPersons(persons.filter(p => p.name !== person.name)))
+
+      notify(`Removed ${person.name}.`, 2500)
     }
   }
 
@@ -58,7 +65,16 @@ const App = () => {
       personService.replaceWith(updatedPerson)
         .then(setPersons(persons.map(p => p.name === toUpdate.name ? updatedPerson : p))
         )
+        
+        notify(`Updated ${updatedPerson.name}'s phone number.`, 2500)
     }
+  }
+
+  const notify = (message, duration) => {
+    setNotification(message)
+    setTimeout(() => {
+      setNotification(null)
+    }, duration)
   }
 
   const handleNameChange = (event) => {
@@ -81,6 +97,8 @@ const App = () => {
     <div>
       <h1>Phonebook</h1>
 
+      <Notification message={notification} />
+
       <FilterInput searchfilter={searchFilter}
         handleSearchFilterChange={handleSearchFilterChange} />
 
@@ -95,7 +113,6 @@ const App = () => {
 
       <h2>Numbers</h2>
       < PersonsList persons={persons} searchFilter={searchFilter} removePerson={removePerson} />
-
     </div >
   )
 }
