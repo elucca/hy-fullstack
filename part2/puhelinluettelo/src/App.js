@@ -63,10 +63,15 @@ const App = () => {
 
     if (toUpdate) {
       personService.replaceWith(updatedPerson)
-        .then(setPersons(persons.map(p => p.name === toUpdate.name ? updatedPerson : p))
-        )
-        
-        notify(`Updated ${updatedPerson.name}'s phone number.`, 2500)
+        .then(() => {
+          setPersons(persons.map(p => p.name === toUpdate.name ? updatedPerson : p))
+          notify(`Updated ${updatedPerson.name}'s phone number.`, 2500)
+        }
+        ).catch(() => {
+          notify(`Error: ${toUpdate.name} was already removed.`, 2500)
+          // Remove the erraneous person that no longer exists from the list
+          setPersons(persons.filter(p => p.name !== toUpdate.name))
+        })
     }
   }
 

@@ -23,9 +23,12 @@ const getByName = (person) => {
 }
 
 const replaceWith = (person) => {
-    // I'm not returning the request data. It doesn't really matter, but maybe I should?
     return getByName(person).then(persons => {
-        axios.put(`${baseUrl}/${persons[0].id}`, person)
+        let id = null;
+        if (persons[0]) {
+            id = persons[0].id
+        }
+        return axios.put(`${baseUrl}/${id}`, person).then(response => response.data)
     })
 }
 
