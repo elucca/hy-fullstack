@@ -45,6 +45,9 @@ const App = () => {
 
         notify(`Added ${newPerson.name}.`, 2500)
       })
+      .catch(error => {
+        notify(error.response.data.error, 5000)
+      })
   }
 
   const removePerson = (person) => {
@@ -95,7 +98,7 @@ const App = () => {
   }
 
   const personsListContains = (name) => {
-    return persons.filter(person => person.name.toLowerCase() === newName.toLowerCase()).length > 0
+    return persons.filter(person => person.name.toLowerCase() === name.toLowerCase()).length > 0
   }
 
   return (
