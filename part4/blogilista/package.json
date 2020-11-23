@@ -7,7 +7,8 @@
     "start": "node src/index.js",
     "watch": "nodemon src/index.js",
     "test": "jest --verbose",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "fix": "eslint . --fix"
   },
   "author": "Juho Kesälä",
   "license": "ISC",
