@@ -1,6 +1,5 @@
 const mongoose = require('mongoose')
 const supertest = require('supertest')
-const { response } = require('../app')
 const app = require('../app')
 const blog = require('../models/blog')
 const helper = require('./test_helper')
@@ -20,7 +19,7 @@ test('blogs are returned as json', async () => {
 })
 
 test('all blogs are returned', async () => {
-  await api.get('/api/blogs')
+  const response = await api.get('/api/blogs')
   expect(response.body).toHaveLength(helper.initialBlogs.length)
 })
 
