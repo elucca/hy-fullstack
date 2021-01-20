@@ -58,7 +58,42 @@ test('a new blog with undefined likes is saved with 0 likes', async () => {
   const response = await api.get('/api/blogs')
   const addedBlog = response.body.find(blog => blog.title === 'Undefined likes')
 
-  expect(addedBlog.likes).toBe(0)  
+  expect(addedBlog.likes).toBe(0)
+})
+
+test('a new blog with undefined title or url is not added', async () => {
+  const undefinedUrl = {
+    title: 'Undefined url',
+    author: 'Robert C. Martin',
+    likes: 5,
+  }
+
+  const undefinedTitle = {
+    author: 'Robert C. Martin',
+    url: 'http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html',
+    likes: 4,
+  }
+
+  const bothUndefined = {
+    author: 'Robert C. Martin',
+    likes: 5,
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(undefinedUrl)
+    .expect(400)
+
+  await api
+    .post('/api/blogs')
+    .send(undefinedTitle)
+    .expect(400)
+
+  await api
+    .post('/api/blogs')
+    .send(bothUndefined)
+    .expect(400)
+
 })
 
 afterAll(() => {
