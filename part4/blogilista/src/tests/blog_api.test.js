@@ -31,10 +31,10 @@ test('blogs have field named id', async () => {
 test('a new blog can be added', async () => {
   const blog = helper.initialBlogs[0]
   await api
-  .post('/api/blogs')
-  .send(blog)
-  .expect(201)
-  .expect('Content-Type', /application\/json/)
+    .post('/api/blogs')
+    .send(blog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
 
   const response = await api.get('/api/blogs')
   expect(response.body).toHaveLength(helper.initialBlogs.length + 1)
@@ -42,6 +42,23 @@ test('a new blog can be added', async () => {
   // check that the added blog has correct title (could do fuller validation here)
   const titles = response.body.map(blog => blog.title)
   expect(titles).toContain(helper.initialBlogs[0].title)
+})
+
+test('a new blog with undefined likes is saved with 0 likes', async () => {
+  const newBlog = {
+    title: 'Undefined likes',
+    author: 'Robert C. Martin',
+    url: 'http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html',
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+
+  const response = await api.get('/api/blogs')
+  const addedBlog = response.body.find(blog => blog.title === 'Undefined likes')
+
+  expect(addedBlog.likes).toBe(0)  
 })
 
 afterAll(() => {
