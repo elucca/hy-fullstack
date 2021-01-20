@@ -96,6 +96,18 @@ test('a new blog with undefined title or url is not added', async () => {
 
 })
 
+test('a blog can be deleted', async () => {
+  const response = await api.get('/api/blogs')
+  const blogId = response.body[0].id
+  
+  await api
+  .del(`/api/blogs/${blogId}`)
+  .expect(204)
+
+  const resAfterDelete = await api.get('/api/blogs')
+  expect(resAfterDelete.body).toHaveLength(helper.initialBlogs.length - 1)  
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
