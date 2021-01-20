@@ -28,6 +28,22 @@ test('blogs have field named id', async () => {
   response.body.forEach(blog => expect(blog.id).toBeDefined())
 })
 
+test('a new blog can be added', async () => {
+  const blog = helper.initialBlogs[0]
+  await api
+  .post('/api/blogs')
+  .send(blog)
+  .expect(201)
+  .expect('Content-Type', /application\/json/)
+
+  const response = await api.get('/api/blogs')
+  expect(response.body).toHaveLength(helper.initialBlogs.length + 1)
+
+  // check that the added blog has correct title (could do fuller validation here)
+  const titles = response.body.map(blog => blog.title)
+  expect(titles).toContain(helper.initialBlogs[0].title)
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
