@@ -99,13 +99,33 @@ test('a new blog with undefined title or url is not added', async () => {
 test('a blog can be deleted', async () => {
   const response = await api.get('/api/blogs')
   const blogId = response.body[0].id
-  
+
   await api
-  .del(`/api/blogs/${blogId}`)
-  .expect(204)
+    .del(`/api/blogs/${blogId}`)
+    .expect(204)
 
   const resAfterDelete = await api.get('/api/blogs')
-  expect(resAfterDelete.body).toHaveLength(helper.initialBlogs.length - 1)  
+  expect(resAfterDelete.body).toHaveLength(helper.initialBlogs.length - 1)
+})
+
+test('a blog can be updated', async () => {
+  const response = await api.get('/api/blogs')
+  const blogId = response.body[0].id
+
+  const toUpdate = {
+    title: 'new title',
+    author: 'new author',
+    url: 'new url',
+    likes: 10,
+  }
+
+  await api
+    .put(`/api/blogs/${blogId}`)
+    .send(toUpdate)
+    .expect(200)
+
+  const responseAfterUpdate = await api.get('/api/blogs')
+  expect(responseAfterUpdate.body[0]).toMatchObject(toUpdate)
 })
 
 afterAll(() => {
