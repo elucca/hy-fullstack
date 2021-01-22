@@ -24,6 +24,7 @@ usersRouter.post('/', async (request, response) => {
     name: body.name,
     passwordHash: hashedPassword
   })
+
   try {
     savedUser = await user.save()
     response.json(savedUser)
