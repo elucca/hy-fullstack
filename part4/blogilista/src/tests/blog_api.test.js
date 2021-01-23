@@ -1,14 +1,18 @@
 const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../app')
-const blog = require('../models/blog')
+const Blog = require('../models/blog')
+const User = require('../models/user')
 const helper = require('./test_helper')
+const jwt = require('jsonwebtoken')
 
 const api = supertest(app)
 
 beforeEach(async () => {
-  await blog.deleteMany({})
-  await blog.insertMany(helper.initialBlogs)
+  await Blog.deleteMany({})
+  await User.deleteMany({})
+  await helper.insertUsers()
+  await helper.insertBlogs()
 })
 
 test('blogs are returned as json', async () => {
@@ -28,10 +32,14 @@ test('blogs have field named id', async () => {
   response.body.forEach(blog => expect(blog.id).toBeDefined())
 })
 
-test('a new blog can be added', async () => {
+test('a new blog can be added by an authorized user', async () => {
+  const token = await logIn()
+
   const blog = helper.initialBlogs[0]
+
   await api
     .post('/api/blogs')
+    .set('Authorization', 'bearer ' + token)
     .send(blog)
     .expect(201)
     .expect('Content-Type', /application\/json/)
@@ -44,7 +52,21 @@ test('a new blog can be added', async () => {
   expect(titles).toContain(helper.initialBlogs[0].title)
 })
 
-test('a new blog with undefined likes is saved with 0 likes', async () => {
+test('a blog cannot be added when user token is missing', async () => {
+  const blog = helper.initialBlogs[0]
+
+  await api
+    .post('/api/blogs')
+    .send(blog)
+    .expect(401)
+
+  const response = await api.get('/api/blogs')
+  expect(response.body).toHaveLength(helper.initialBlogs.length)
+})
+
+test('a new blog added by an authorized user with undefined likes is saved with 0 likes', async () => {
+  const token = await logIn()
+
   const newBlog = {
     title: 'Undefined likes',
     author: 'Robert C. Martin',
@@ -53,6 +75,7 @@ test('a new blog with undefined likes is saved with 0 likes', async () => {
 
   await api
     .post('/api/blogs')
+    .set('Authorization', 'bearer ' + token)
     .send(newBlog)
 
   const response = await api.get('/api/blogs')
@@ -61,7 +84,9 @@ test('a new blog with undefined likes is saved with 0 likes', async () => {
   expect(addedBlog.likes).toBe(0)
 })
 
-test('a new blog with undefined title or url is not added', async () => {
+test('a new blog added by an authorized user with undefined title or url is not added', async () => {
+  const token = await logIn()
+
   const undefinedUrl = {
     title: 'Undefined url',
     author: 'Robert C. Martin',
@@ -81,27 +106,32 @@ test('a new blog with undefined title or url is not added', async () => {
 
   await api
     .post('/api/blogs')
+    .set('Authorization', 'bearer ' + token)
     .send(undefinedUrl)
     .expect(400)
 
   await api
     .post('/api/blogs')
+    .set('Authorization', 'bearer ' + token)
     .send(undefinedTitle)
     .expect(400)
 
   await api
     .post('/api/blogs')
+    .set('Authorization', 'bearer ' + token)
     .send(bothUndefined)
     .expect(400)
 
 })
 
-test('a blog can be deleted', async () => {
+test('a blog can be deleted by the correct authorized user', async () => {
+  const token = await logIn()
   const response = await api.get('/api/blogs')
   const blogId = response.body[0].id
 
   await api
     .del(`/api/blogs/${blogId}`)
+    .set('Authorization', 'bearer ' + token)
     .expect(204)
 
   const resAfterDelete = await api.get('/api/blogs')
@@ -131,3 +161,13 @@ test('a blog can be updated', async () => {
 afterAll(() => {
   mongoose.connection.close()
 })
+
+const logIn = async () => {
+  const user = helper.initialUsers[0]
+
+  const response = await api
+    .post('/api/login')
+    .send({ username: user.username, password: user.password })
+
+  return response.body.token
+}

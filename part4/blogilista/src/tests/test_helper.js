@@ -20,9 +20,9 @@ const initialBlogs = [
 
 const initialUsers = [
   {
-    username: 'first_user',
-    name: 'First Name',
-    password: 'firstpassword'
+    username: 'test_user',
+    name: 'Firstname Lastname',
+    password: 'password'
   }
 ]
 
@@ -40,16 +40,26 @@ const insertUsers = async () => {
   }
 }
 
+const insertBlogs = async () => {
+  const users = await User.find({})
+
+  for (const blog of initialBlogs) {
+    blog.user = users[0]._id
+  }
+
+  await Blog.insertMany(initialBlogs)
+}
+
 const blogsInDb = async () => {
   const blogs = await Blog.find({})
   return blogs.map(blog => blog.toJSON())
 }
 
 const usersInDb = async () => {
-  const users = await user.find({})
+  const users = await User.find({})
   return users.map(user => user.toJSON())
 }
 
 module.exports = {
-  initialBlogs, initialUsers, blogsInDb, usersInDb, insertUsers
+  initialBlogs, initialUsers, blogsInDb, usersInDb, insertUsers, insertBlogs
 }
