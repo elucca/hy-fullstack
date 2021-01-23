@@ -2,6 +2,7 @@ const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
 const User = require('../models/user')
 const jwt = require('jsonwebtoken')
+const blog = require('../models/blog')
 
 blogsRouter.get('/', async (request, response) => {
   const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 })
@@ -43,8 +44,26 @@ blogsRouter.post('/', async (request, response) => {
 })
 
 blogsRouter.delete('/:id', async (request, response) => {
-  await Blog.findByIdAndRemove(request.params.id)
-  response.status(204).end()
+  const token = request.token
+
+  if (!token) {
+    return response.status(401).json({ error: "You are not logged in (Token is missing.)." })
+  }
+
+  decodedToken = jwt.verify(request.token, process.env.SECRET)
+
+  if (!decodedToken.id) {
+    return response.status(401).json({ error: "You are not logged in (Token is invalid)." })
+  }
+
+  const blogToDelete = await blog.findById(request.params.id)
+
+  if (blogToDelete.user.toString() === decodedToken.id) {
+    await Blog.findByIdAndRemove(request.params.id)
+    return response.status(204).end()
+  }
+
+  return response.status(401).json({ error: "Cannot delete blog: It belongs to someone else." })
 })
 
 blogsRouter.put('/:id', async (request, response) => {
