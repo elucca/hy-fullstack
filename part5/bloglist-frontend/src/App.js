@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Blog from './components/Blog'
+import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -7,7 +8,7 @@ const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [errorMessage, setErrorMessage] = useState(null)
+  const [notification, setNotification] = useState(null)
   const [user, setUser] = useState(null)
 
   const [newTitle, setNewTitle] = useState('')
@@ -40,9 +41,9 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
-      setErrorMessage('Invalid username or password')
+      setNotification('Invalid username or password')
       setTimeout(() => {
-        setErrorMessage(null)
+        setNotification(null)
       }, 3000)
     }
   }
@@ -62,13 +63,24 @@ const App = () => {
     }
 
     const createdBlog = await blogService.create(newBlog)
-    setBlogs(blogs.concat(createdBlog))    
+    setBlogs(blogs.concat(createdBlog))
+
+    setNotification(`Added new blog: ${newTitle} by ${newAuthor}`)
+    setTimeout(() => {
+      setNotification(null)
+    }, 3000)
+
+    setNewTitle('')
+    setNewAuthor('')
+    setNewUrl('')
+    setNewLikes('')
   }
 
   const loginForm = () => {
     return (
       <div>
         <h2>Login</h2>
+        <Notification message={notification} />
         <form onSubmit={handleLogin}>
           <div>
             Username &nbsp;
@@ -92,6 +104,21 @@ const App = () => {
 
           <button type='submit'>Login</button>
         </form>
+      </div>
+    )
+  }
+
+  const blogList = () => {
+    return (
+      <div>
+        <h2>Blogs</h2>
+        <p>Logged in as {user.name} &nbsp;</p>
+        <Notification message={notification} />
+        <button onClick={() => handleLogout()}>Logout</button>
+        {blogForm()}
+        {blogs.map(blog => (
+          <Blog key={blog.id} blog={blog} />
+        ))}
       </div>
     )
   }
@@ -133,20 +160,6 @@ const App = () => {
       <button type='submit'>Add</button>
     </form>
   )
-
-  const blogList = () => {
-    return (
-      <div>
-        <h2>Blogs</h2>
-        <p>Logged in as {user.name} &nbsp;</p>
-        <button onClick={() => handleLogout()}>Logout</button>
-        {blogForm()}
-        {blogs.map(blog => (
-          <Blog key={blog.id} blog={blog} />
-        ))}
-      </div>
-    )
-  }
 
   return (
     <div>
