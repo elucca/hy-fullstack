@@ -55,7 +55,7 @@ const App = () => {
     setUser(null)
   }
 
-  const createBlog = async (newBlog) => {
+  const createBlog = async newBlog => {
     blogFormRef.current.toggleVisibility()
 
     const createdBlog = await blogService.create(newBlog)
@@ -65,6 +65,24 @@ const App = () => {
     setTimeout(() => {
       setNotification(null)
     }, 3000)
+  }
+
+  const likeBlog = async blogToUpdate => {
+    const updatedBlog = {
+      id: blogToUpdate.id,
+      user: blogToUpdate.user,
+      title: blogToUpdate.title,
+      author: blogToUpdate.author,
+      url: blogToUpdate.url,
+      likes: blogToUpdate.likes + 1,
+    }
+
+    await blogService.update(updatedBlog)
+
+    // janky update to displayed blog
+    const newBlogs = blogs.filter(blog => blog.id != blogToUpdate.id)
+    console.log(newBlogs)
+    setBlogs(newBlogs.concat(updatedBlog))
   }
 
   const loginForm = () => {
@@ -108,7 +126,7 @@ const App = () => {
         <button onClick={() => handleLogout()}>Logout</button>
         {blogForm()}
         {blogs.map(blog => (
-          <Blog key={blog.id} blog={blog} />
+          <Blog key={blog.id} blog={blog} likeBlog={likeBlog} />
         ))}
       </div>
     )

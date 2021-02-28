@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, likeBlog }) => {
   const [showDetailed, setShowDetailed] = useState(false)
 
   const blogStyle = {
@@ -15,6 +15,10 @@ const Blog = ({ blog }) => {
     setShowDetailed(!showDetailed)
   }
 
+  const handleLike = () => {
+    likeBlog(blog)
+  }
+
   if (showDetailed) {
     return (
       <div style={blogStyle}>
@@ -23,7 +27,9 @@ const Blog = ({ blog }) => {
         <br></br>
         {blog.url} <br></br>
         Likes: {blog.likes} &nbsp;
-        <button>Like</button>
+        <button onClick={handleLike}>Like</button>
+        <br></br>
+        Added by: {blog.user.name}
       </div>
     )
   } else {
