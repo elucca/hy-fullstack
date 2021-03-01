@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import PropTypes from 'prop-types'
 
 const Blog = ({ blog, likeBlog, deleteBlog, user }) => {
   const [showDetailed, setShowDetailed] = useState(false)
@@ -24,7 +25,11 @@ const Blog = ({ blog, likeBlog, deleteBlog, user }) => {
   }
 
   const handleDelete = () => {
-    if (window.confirm(`Are you sure you want to remove ${blog.title} by ${blog.author}?`)) {
+    if (
+      window.confirm(
+        `Are you sure you want to remove ${blog.title} by ${blog.author}?`
+      )
+    ) {
       deleteBlog(blog)
     }
   }
@@ -54,6 +59,13 @@ const Blog = ({ blog, likeBlog, deleteBlog, user }) => {
       </div>
     )
   }
+}
+
+Blog.propTypes = {
+  blog: PropTypes.object.isRequired,
+  likeBlog: PropTypes.func.isRequired,
+  deleteBlog: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
 }
 
 export default Blog
