@@ -65,7 +65,6 @@ const App = () => {
     blogFormRef.current.toggleVisibility()
 
     const createdBlog = await blogService.create(newBlog)
-    console.log(createdBlog)
     setBlogs(sortBlogs(blogs.concat(createdBlog)))
 
     setNotification(`Added new blog: ${newBlog.title} by ${newBlog.author}`)
@@ -77,10 +76,10 @@ const App = () => {
   const deleteBlog = async blogToDelete => {
     try {
       await blogService.remove(blogToDelete)
-      setNotification(`Removed blog: \"${blogToDelete.title}\".`)
-      setBlogs(sortBlogs(blogs.filter(blog => blog.id != blogToDelete.id)))
+      setNotification(`Removed blog: "${blogToDelete.title}".`)
+      setBlogs(sortBlogs(blogs.filter(blog => blog.id !== blogToDelete.id)))
     } catch {
-      setNotification(`Cannot remove blog: \"${blogToDelete.title}\" belongs to another user.`)
+      setNotification(`Cannot remove blog: "${blogToDelete.title}" belongs to another user.`)
     }
   }
 
@@ -97,7 +96,7 @@ const App = () => {
     await blogService.update(updatedBlog)
 
     // janky update to displayed blog
-    const newBlogs = blogs.filter(blog => blog.id != blogToUpdate.id)
+    const newBlogs = blogs.filter(blog => blog.id !== blogToUpdate.id)
     setBlogs(sortBlogs(newBlogs.concat(updatedBlog)))
   }
 
