@@ -5,6 +5,8 @@ import Blog from '../components/Blog'
 
 describe('<Blog />', () => {
   let component
+  let likeBlog
+  let deleteBlog
 
   beforeEach(() => {
     const user = {
@@ -21,8 +23,16 @@ describe('<Blog />', () => {
       user: user,
     }
 
+    likeBlog = jest.fn()
+    deleteBlog = jest.fn()
+
     component = render(
-      <Blog blog={blog} likeBlog={jest.fn()} deleteBlog={jest.fn()} user={user} />
+      <Blog
+        blog={blog}
+        likeBlog={likeBlog}
+        deleteBlog={deleteBlog}
+        user={user}
+      />
     )
   })
 
@@ -45,5 +55,15 @@ describe('<Blog />', () => {
       'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html'
     )
     expect(component.container).toHaveTextContent('12')
+  })
+
+  test('like handler is called correctly', () => {
+    const showButton = component.getByText('Show')
+    fireEvent.click(showButton)
+    const likeButton = component.getByText('Like')
+    fireEvent.click(likeButton)
+    fireEvent.click(likeButton)
+
+    expect(likeBlog.mock.calls).toHaveLength(2)
   })
 })
