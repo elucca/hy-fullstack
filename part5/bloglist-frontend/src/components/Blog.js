@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
 const Blog = ({ blog, likeBlog, deleteBlog, user }) => {
+  // Why do I have the user in props if it's also contained in the blog?
   const [showDetailed, setShowDetailed] = useState(false)
 
   const blogStyle = {
@@ -65,7 +66,7 @@ Blog.propTypes = {
   blog: PropTypes.object.isRequired,
   likeBlog: PropTypes.func.isRequired,
   deleteBlog: PropTypes.func.isRequired,
-  user: PropTypes.object
+  user: PropTypes.object,
 }
 
 export default Blog
