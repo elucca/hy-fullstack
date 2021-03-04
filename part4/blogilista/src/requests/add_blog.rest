@@ -3,7 +3,7 @@ content-type: application/json
 authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InhYS8OkeXR0w6Rqw6RYeCIsImlkIjoiNjAwYTgzMTVmNDI2ZGIyNzFmY2MwZjA5IiwiaWF0IjoxNjExMzgzNDc5fQ.cfVJRGDzJadWhiHR1pJowaJVsejImXFdHI68j1vCrdI
 
 {
-    "title": "created while logged in 3s",
+    "title": "created while logged in",
     "author": "Test author",
     "url": "http://testblog.test",
     "likes": "38"

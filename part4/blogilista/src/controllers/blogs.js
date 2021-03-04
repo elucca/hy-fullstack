@@ -14,13 +14,17 @@ blogsRouter.post('/', async (request, response) => {
   const token = request.token
 
   if (!token) {
-    return response.status(401).json({ error: "You are not logged in (Token is missing.)." })
+    return response
+      .status(401)
+      .json({ error: 'You are not logged in (Token is missing.).' })
   }
 
   decodedToken = jwt.verify(request.token, process.env.SECRET)
 
   if (!decodedToken.id) {
-    return response.status(401).json({ error: "You are not logged in (Token is invalid)." })
+    return response
+      .status(401)
+      .json({ error: 'You are not logged in (Token is invalid).' })
   }
 
   const user = await User.findById(decodedToken.id)
@@ -30,7 +34,7 @@ blogsRouter.post('/', async (request, response) => {
     author: body.author,
     url: body.url,
     likes: body.likes === undefined ? 0 : body.likes,
-    user: user === undefined ? undefined : user.id
+    user: user === undefined ? undefined : user.id,
   })
 
   if (blog.title === undefined || blog.url === undefined) {
@@ -47,13 +51,17 @@ blogsRouter.delete('/:id', async (request, response) => {
   const token = request.token
 
   if (!token) {
-    return response.status(401).json({ error: "You are not logged in (Token is missing.)." })
+    return response
+      .status(401)
+      .json({ error: 'You are not logged in (Token is missing.).' })
   }
 
   decodedToken = jwt.verify(request.token, process.env.SECRET)
 
   if (!decodedToken.id) {
-    return response.status(401).json({ error: "You are not logged in (Token is invalid)." })
+    return response
+      .status(401)
+      .json({ error: 'You are not logged in (Token is invalid).' })
   }
 
   const blogToDelete = await blog.findById(request.params.id)
@@ -63,7 +71,13 @@ blogsRouter.delete('/:id', async (request, response) => {
     return response.status(204).end()
   }
 
-  return response.status(401).json({ error: "Cannot delete blog: It belongs to someone else." })
+  return response
+    .status(401)
+    .json({ error: 'Cannot delete blog: It belongs to someone else.' })
+})
+
+blogsRouter.delete('/', async (request, response) => {
+  await Blog.remove({})
 })
 
 blogsRouter.put('/:id', async (request, response) => {
@@ -75,7 +89,9 @@ blogsRouter.put('/:id', async (request, response) => {
     likes: body.likes,
   }
 
-  const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, { new: true })
+  const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, {
+    new: true,
+  })
   response.json(updatedBlog.toJSON())
 })
 
