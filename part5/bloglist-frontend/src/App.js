@@ -49,6 +49,7 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
+      console.log(exception)
       setNotification('Invalid username or password')
       setTimeout(() => {
         setNotification(null)
@@ -102,7 +103,7 @@ const App = () => {
 
   const loginForm = () => {
     return (
-      <div>
+      <div id='login-form'>
         <h2>Login</h2>
         <Notification message={notification} />
         <form onSubmit={handleLogin}>
