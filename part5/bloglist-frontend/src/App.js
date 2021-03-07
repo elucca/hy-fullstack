@@ -80,7 +80,9 @@ const App = () => {
       setNotification(`Removed blog: "${blogToDelete.title}".`)
       setBlogs(sortBlogs(blogs.filter(blog => blog.id !== blogToDelete.id)))
     } catch {
-      setNotification(`Cannot remove blog: "${blogToDelete.title}" belongs to another user.`)
+      setNotification(
+        `Cannot remove blog: "${blogToDelete.title}" belongs to another user.`
+      )
     }
   }
 
@@ -110,6 +112,7 @@ const App = () => {
           <div>
             Username &nbsp;
             <input
+              id='username'
               type='text'
               value={username}
               name='Username'
@@ -120,6 +123,7 @@ const App = () => {
           <div>
             Password &nbsp;
             <input
+              id='password'
               type='password'
               value={password}
               name='Password'
@@ -127,7 +131,7 @@ const App = () => {
             />
           </div>
 
-          <button type='submit'>Login</button>
+          <button id='login-button' type='submit'>Login</button>
         </form>
       </div>
     )
@@ -142,7 +146,13 @@ const App = () => {
         <button onClick={() => handleLogout()}>Logout</button>
         {blogForm()}
         {blogs.map(blog => (
-          <Blog key={blog.id} blog={blog} likeBlog={likeBlog} deleteBlog={deleteBlog} user={user} />
+          <Blog
+            key={blog.id}
+            blog={blog}
+            likeBlog={likeBlog}
+            deleteBlog={deleteBlog}
+            user={user}
+          />
         ))}
       </div>
     )
