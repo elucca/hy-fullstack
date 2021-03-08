@@ -39,13 +39,15 @@ const Blog = ({ blog, likeBlog, deleteBlog, user }) => {
     // Presence of the delete button should really be based on id, not username
     // Requires change to backend to return the id
     return (
-      <div style={blogStyle}>
+      <div id='detailed-blog' style={blogStyle}>
         {blog.title} by {blog.author} &nbsp;
         <button onClick={toggleShowDetailed}>Hide</button>
         <br></br>
         {blog.url} <br></br>
         Likes: {blog.likes} &nbsp;
-        <button onClick={handleLike}>Like</button>
+        <button id='like-button' onClick={handleLike}>
+          Like
+        </button>
         <br></br>
         Added by: {blog.user.name}
         <br></br>
@@ -56,7 +58,9 @@ const Blog = ({ blog, likeBlog, deleteBlog, user }) => {
     return (
       <div style={blogStyle}>
         {blog.title} by {blog.author} &nbsp;
-        <button onClick={toggleShowDetailed}>Show</button>
+        <button id='show-blog-button' onClick={toggleShowDetailed}>
+          Show
+        </button>
       </div>
     )
   }

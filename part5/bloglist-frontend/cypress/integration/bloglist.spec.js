@@ -44,17 +44,36 @@ describe('Blog app', function () {
         cy.get('#login-button').click()
       })
 
-      it('A blog can be created', function () {
+      it('a blog can be created', function () {
         cy.get('#togglable-button').click() // Not ideal, breaks if another toggleable is added
 
         cy.get('#title').type('A Blog')
         cy.get('#author').type('The Author')
         cy.get('#url').type('website')
-        cy.get('#likes').type(12)
+        cy.get('#likes').type(0)
 
         cy.get('#submit-blog-button').click()
 
         cy.contains('A Blog')
+      })
+
+      describe('When a blog has been added', function () {
+        beforeEach(function () {
+          cy.get('#togglable-button').click() // Not ideal, breaks if another toggleable is added
+
+          cy.get('#title').type('A Blog')
+          cy.get('#author').type('The Author')
+          cy.get('#url').type('website')
+          cy.get('#likes').type(0)
+
+          cy.get('#submit-blog-button').click()
+        })
+
+        it('it can be liked', function () {
+          cy.get('#show-blog-button').click()
+          cy.get('#like-button').click()
+          cy.get('#detailed-blog').should('contain', '1')
+        })
       })
     })
   })
