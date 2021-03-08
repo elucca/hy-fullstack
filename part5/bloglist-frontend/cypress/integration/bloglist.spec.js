@@ -74,6 +74,12 @@ describe('Blog app', function () {
           cy.get('#like-button').click()
           cy.get('#detailed-blog').should('contain', '1')
         })
+
+        it('it can be deleted', function () {
+          cy.get('#show-blog-button').click()
+          cy.get('#delete-blog-button').click()
+          cy.get('#detailed-blog').should('not.exist')
+        })
       })
     })
   })

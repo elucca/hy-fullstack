@@ -67,6 +67,7 @@ const App = () => {
 
     const createdBlog = await blogService.create(newBlog)
     setBlogs(sortBlogs(blogs.concat(createdBlog)))
+    console.log(createdBlog)
 
     setNotification(`Added new blog: ${newBlog.title} by ${newBlog.author}`)
     setTimeout(() => {
@@ -151,7 +152,7 @@ const App = () => {
             blog={blog}
             likeBlog={likeBlog}
             deleteBlog={deleteBlog}
-            user={user}
+            loggedInUser={user}
           />
         ))}
       </div>

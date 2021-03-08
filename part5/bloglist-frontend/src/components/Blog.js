@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
-const Blog = ({ blog, likeBlog, deleteBlog, user }) => {
-  // Why do I have the user in props if it's also contained in the blog?
+const Blog = ({ blog, likeBlog, deleteBlog, loggedInUser }) => {
   const [showDetailed, setShowDetailed] = useState(false)
 
   const blogStyle = {
@@ -18,7 +17,11 @@ const Blog = ({ blog, likeBlog, deleteBlog, user }) => {
   }
 
   const deleteButton = () => {
-    return <button onClick={handleDelete}>Delete</button>
+    return (
+      <button id='delete-blog-button' onClick={handleDelete}>
+        Delete
+      </button>
+    )
   }
 
   const handleLike = () => {
@@ -51,7 +54,7 @@ const Blog = ({ blog, likeBlog, deleteBlog, user }) => {
         <br></br>
         Added by: {blog.user.name}
         <br></br>
-        {user.username === blog.user.username && deleteButton()}
+        {loggedInUser.username === blog.user.username && deleteButton()}
       </div>
     )
   } else {
