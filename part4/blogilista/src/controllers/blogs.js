@@ -34,7 +34,7 @@ blogsRouter.post('/', async (request, response) => {
     author: body.author,
     url: body.url,
     likes: body.likes === undefined ? 0 : body.likes,
-    user: user === undefined ? undefined : user.id,
+    user: user === undefined ? undefined : user,
   })
 
   if (blog.title === undefined || blog.url === undefined) {

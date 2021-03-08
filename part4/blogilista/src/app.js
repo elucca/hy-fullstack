@@ -11,14 +11,17 @@ const tokenExtractor = require('./middlewares/tokenExtractor')
 const logger = require('./utils/logger')
 const mongoose = require('mongoose')
 
-
 logger.info('connecting to', config.MONGODB_URI)
 
-mongoose.connect(config.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose
+  .connect(config.MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then(() => {
     logger.info('connected to MongoDB')
   })
-  .catch((error) => {
+  .catch(error => {
     logger.error('error connection to MongoDB:', error.message)
   })
 
@@ -34,7 +37,8 @@ app.use('/api/login', loginRouter)
 
 if (process.env.NODE_ENV === 'test') {
   const testRouter = require('./controllers/test')
-  app.use('/api/testing', testRouter)
+  app.use('/api/test', testRouter)
 }
+
 
 module.exports = app
