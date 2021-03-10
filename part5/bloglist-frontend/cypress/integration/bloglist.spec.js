@@ -81,6 +81,41 @@ describe('Blog app', function () {
           cy.get('#detailed-blog').should('not.exist')
         })
       })
+
+      describe.only('When multiple blog have been added', function () {
+        beforeEach(function () {
+          // lol copypaste
+          cy.get('#togglable-button').click() // Not ideal, breaks if another toggleable is added
+          cy.get('#title').type('First')
+          cy.get('#author').type('The Author')
+          cy.get('#url').type('website')
+          cy.get('#likes').type(10)
+          cy.get('#submit-blog-button').click()
+
+          cy.get('#togglable-button').click()
+          cy.get('#title').type('Third')
+          cy.get('#author').type('The Author')
+          cy.get('#url').type('website')
+          cy.get('#likes').type(2)
+          cy.get('#submit-blog-button').click()
+
+          cy.get('#togglable-button').click()
+          cy.get('#title').type('Second')
+          cy.get('#author').type('The Author')
+          cy.get('#url').type('website')
+          cy.get('#likes').type(7)
+          cy.get('#submit-blog-button').click()
+        })
+
+        it('they are sorted by number of likes', function () {
+          cy.wait(500) // Chill for a bit to let the blogs get sorted
+          cy.get('#blog-list').children('#blog').then(blogs => {
+            expect(blogs[0]).to.contain("First")
+            expect(blogs[1]).to.contain("Second")
+            expect(blogs[2]).to.contain("Third")
+          })
+        })
+      })
     })
   })
 })

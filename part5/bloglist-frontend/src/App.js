@@ -132,7 +132,9 @@ const App = () => {
             />
           </div>
 
-          <button id='login-button' type='submit'>Login</button>
+          <button id='login-button' type='submit'>
+            Login
+          </button>
         </form>
       </div>
     )
@@ -146,15 +148,17 @@ const App = () => {
         <Notification message={notification} />
         <button onClick={() => handleLogout()}>Logout</button>
         {blogForm()}
-        {blogs.map(blog => (
-          <Blog
-            key={blog.id}
-            blog={blog}
-            likeBlog={likeBlog}
-            deleteBlog={deleteBlog}
-            loggedInUser={user}
-          />
-        ))}
+        <div id='blog-list'>
+          {blogs.map(blog => (
+            <Blog
+              key={blog.id}
+              blog={blog}
+              likeBlog={likeBlog}
+              deleteBlog={deleteBlog}
+              loggedInUser={user}
+            />
+          ))}
+        </div>
       </div>
     )
   }

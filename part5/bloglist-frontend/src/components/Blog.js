@@ -59,7 +59,7 @@ const Blog = ({ blog, likeBlog, deleteBlog, loggedInUser }) => {
     )
   } else {
     return (
-      <div style={blogStyle}>
+      <div id='blog' style={blogStyle}>
         {blog.title} by {blog.author} &nbsp;
         <button id='show-blog-button' onClick={toggleShowDetailed}>
           Show
