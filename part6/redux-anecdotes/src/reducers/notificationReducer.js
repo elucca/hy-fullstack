@@ -1,12 +1,17 @@
 
-const initialState = 'Notification'
-
-const notificationReducer = (state = initialState, action) => {
+const notificationReducer = (state = '', action) => {
   switch (action.type) {
     case 'CHANGE_NOTIFICATION':
       return action.data
     default:
       return state
+  }
+}
+
+export const changeNotification = (notification) => {
+  return {
+    type: 'CHANGE_NOTIFICATION',
+    data: notification
   }
 }
 
