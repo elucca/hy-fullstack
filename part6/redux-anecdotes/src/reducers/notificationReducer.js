@@ -8,10 +8,10 @@ const notificationReducer = (state = '', action) => {
   }
 }
 
-export const changeNotification = (notification) => {
+export const changeNotification = (filter) => {
   return {
     type: 'CHANGE_NOTIFICATION',
-    data: notification
+    data: filter
   }
 }
 
