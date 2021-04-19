@@ -11,6 +11,7 @@ const AnecdoteList = () => {
   }
 
   const filterAnecdotes = (anecdotes, filter) => {
+    console.log(anecdotes[0])
     return anecdotes.filter(anecdote => anecdote.content.toLowerCase().includes(filter.toLowerCase()))
   }
 
