@@ -11,7 +11,6 @@ const AnecdoteList = () => {
   }
 
   const filterAnecdotes = (anecdotes, filter) => {
-    console.log(anecdotes[0])
     return anecdotes.filter(anecdote => anecdote.content.toLowerCase().includes(filter.toLowerCase()))
   }
 
@@ -19,7 +18,7 @@ const AnecdoteList = () => {
   const anecdotes = useSelector(state => sortByVotes(filterAnecdotes(state.anecdotes, filter)))
 
   const vote = anecdote => {
-    dispatch(voteAnecdote(anecdote.id))
+    dispatch(voteAnecdote(anecdote))
     dispatch(changeNotification(`You voted for \"${anecdote.content}\"`))
 
     setTimeout(() => {
