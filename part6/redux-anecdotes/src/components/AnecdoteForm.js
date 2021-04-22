@@ -11,11 +11,7 @@ const AnecdoteForm = () => {
     event.preventDefault()
     const anecdote = event.target.anecdote.value
     dispatch(addAnecdote(anecdote))
-    dispatch(changeNotification(`Added \"${anecdote}"\.`))
-
-    setTimeout(() => {
-      dispatch(changeNotification(''))
-    }, 5000);
+    dispatch(changeNotification(`Added \"${anecdote}"\.`), 5000)
   }
 
   return (
