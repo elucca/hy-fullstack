@@ -7,22 +7,23 @@ const notificationReducer = (state = '', action) => {
   }
 }
 
+let clearNotification
 export const changeNotification = (notification, duration) => {
   return async dispatch => {
+    window.clearTimeout(clearNotification)
+
     dispatch({
       type: 'CHANGE_NOTIFICATION',
       data: notification,
     })
-    await sleep(duration)
-    dispatch({
-      type: 'CHANGE_NOTIFICATION',
-      data: '',
-    })
-  }
-}
 
-const sleep = duration => {
-  return new Promise(resolve => setTimeout(resolve, duration))
+    clearNotification = setTimeout(() => {
+      dispatch({
+        type: 'CHANGE_NOTIFICATION',
+        data: '',
+      })
+    }, duration)
+  }
 }
 
 export default notificationReducer
