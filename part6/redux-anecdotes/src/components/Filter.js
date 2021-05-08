@@ -1,13 +1,10 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { connect } from 'react-redux'
 import { changeFilter } from '../reducers/filterReducer'
 
-const Filter = () => {
-  const filter = useSelector(state => state.filter)
-  const dispatch = useDispatch()
-
+const Filter = props => {
   const handleFilterChange = newFilter => {
-    dispatch(changeFilter(newFilter))
+    props.changeFilter(newFilter)
   }
 
   return (
@@ -15,7 +12,7 @@ const Filter = () => {
       <form>
         Filter &nbsp;
         <input
-          value={filter}
+          value={props.filter}
           onChange={({ target }) => handleFilterChange(target.value)}
         ></input>
       </form>
@@ -23,4 +20,14 @@ const Filter = () => {
   )
 }
 
-export default Filter
+const mapStateToProps = state => {
+  return {
+    filter: state.filter,
+  }
+}
+
+const mapDispatchToProps = {
+  changeFilter,
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Filter)
