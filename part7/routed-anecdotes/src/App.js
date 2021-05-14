@@ -1,5 +1,11 @@
 import React, { useState } from 'react'
-import { Switch, Route, Link, useRouteMatch } from 'react-router-dom'
+import {
+  Switch,
+  Route,
+  Link,
+  useRouteMatch,
+  useHistory,
+} from 'react-router-dom'
 
 const Menu = () => {
   const padding = {
@@ -16,6 +22,14 @@ const Menu = () => {
       <Link style={padding} to='/about'>
         about
       </Link>
+    </div>
+  )
+}
+
+const Notification = ({ notification }) => {
+  return (
+    <div>
+      <p>{notification}</p>
     </div>
   )
 }
@@ -74,6 +88,8 @@ const CreateNew = props => {
   const [author, setAuthor] = useState('')
   const [info, setInfo] = useState('')
 
+  const history = useHistory()
+
   const handleSubmit = e => {
     e.preventDefault()
     props.addNew({
@@ -82,6 +98,8 @@ const CreateNew = props => {
       info,
       votes: 0,
     })
+    props.handleNotification(`New anecdote created: ${content}`)
+    history.push('/')
   }
 
   return (
@@ -122,7 +140,9 @@ const DetailedAnecdote = props => {
   const anecdote = props.anecdote
   return (
     <div>
-      <h2>{anecdote.content}</h2>
+      <h2>
+        {anecdote.content} by {anecdote.author}
+      </h2>
       <p>has {anecdote.votes} votes</p>
       <p>
         for more information, see <a href={anecdote.info}>{anecdote.info}</a>
@@ -165,6 +185,13 @@ const App = () => {
 
   const anecdoteById = id => anecdotes.find(a => a.id === id)
 
+  const handleNotification = text => {
+    setNotification(text)
+    setTimeout(() => {
+      setNotification('')
+    }, 10000)
+  }
+
   const vote = id => {
     const anecdote = anecdoteById(id)
 
@@ -182,7 +209,7 @@ const App = () => {
       <Menu />
       <Switch>
         <Route path='/create'>
-          <CreateNew addNew={addNew} />
+          <CreateNew addNew={addNew} handleNotification={handleNotification} />
         </Route>
         <Route path='/about'>
           <About />
@@ -191,6 +218,7 @@ const App = () => {
           <DetailedAnecdote anecdote={anecdote} />
         </Route>
         <Route path='/'>
+          <Notification notification={notification} />
           <AnecdoteList anecdotes={anecdotes} />
         </Route>
       </Switch>
