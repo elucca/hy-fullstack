@@ -108,10 +108,17 @@ const CreateNew = props => {
     history.push('/')
   }
 
+  const handleReset = e => {
+    e.preventDefault()
+    contentField.reset();
+    authorField.reset();
+    infoField.reset();
+  }
+
   return (
     <div>
       <h2>create a new anecdote</h2>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} onReset={handleReset}>
         <div>
           content
           <input {...contentField} />
@@ -125,6 +132,7 @@ const CreateNew = props => {
           <input {...infoField} />
         </div>
         <button type='submit'>create</button>
+        <button type='reset'>reset</button>
       </form>
     </div>
   )
@@ -173,10 +181,8 @@ const App = () => {
     : null
 
   const addNew = anecdote => {
-    console.log(anecdote)
     anecdote.id = (Math.random() * 10000).toFixed(0)
     setAnecdotes(anecdotes.concat(anecdote))
-    console.log(anecdotes)
   }
 
   const anecdoteById = id => anecdotes.find(a => a.id === id)
