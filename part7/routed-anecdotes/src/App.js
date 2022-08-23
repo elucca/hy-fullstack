@@ -94,13 +94,17 @@ const CreateNew = props => {
 
   const handleSubmit = e => {
     e.preventDefault()
+    const contentVal = content.value
+    const authorVal = author.value
+    const infoVal = info.value
+
     props.addNew({
-      content,
-      author,
-      info,
+      contentVal,
+      authorVal,
+      infoVal,
       votes: 0,
     })
-    props.handleNotification(`New anecdote created: ${content}`)
+    props.handleNotification(`New anecdote created: ${contentVal}`)
     history.push('/')
   }
 
