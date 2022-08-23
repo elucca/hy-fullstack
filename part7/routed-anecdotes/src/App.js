@@ -86,25 +86,25 @@ const Footer = () => (
 )
 
 const CreateNew = props => {
-  const content = useField('text')
-  const author = useField('text')
-  const info = useField('text')
+  const contentField = useField('text')
+  const authorField = useField('text')
+  const infoField = useField('text')
 
   const history = useHistory()
 
   const handleSubmit = e => {
     e.preventDefault()
-    const contentVal = content.value
-    const authorVal = author.value
-    const infoVal = info.value
+    const content = contentField.value
+    const author = authorField.value
+    const info = infoField.value
 
     props.addNew({
-      contentVal,
-      authorVal,
-      infoVal,
+      content,
+      author,
+      info,
       votes: 0,
     })
-    props.handleNotification(`New anecdote created: ${contentVal}`)
+    props.handleNotification(`New anecdote created: ${content}`)
     history.push('/')
   }
 
@@ -114,15 +114,15 @@ const CreateNew = props => {
       <form onSubmit={handleSubmit}>
         <div>
           content
-          <input {...content} />
+          <input {...contentField} />
         </div>
         <div>
           author
-          <input {...author} />
+          <input {...authorField} />
         </div>
         <div>
           url for more info
-          <input {...info} />
+          <input {...infoField} />
         </div>
         <button type='submit'>create</button>
       </form>
@@ -173,8 +173,10 @@ const App = () => {
     : null
 
   const addNew = anecdote => {
+    console.log(anecdote)
     anecdote.id = (Math.random() * 10000).toFixed(0)
     setAnecdotes(anecdotes.concat(anecdote))
+    console.log(anecdotes)
   }
 
   const anecdoteById = id => anecdotes.find(a => a.id === id)
