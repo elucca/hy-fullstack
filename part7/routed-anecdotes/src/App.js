@@ -114,22 +114,22 @@ const CreateNew = props => {
     authorField.reset();
     infoField.reset();
   }
-
+  
   return (
     <div>
       <h2>create a new anecdote</h2>
       <form onSubmit={handleSubmit} onReset={handleReset}>
         <div>
           content
-          <input {...contentField} />
+          <input {...contentField.field() } />
         </div>
         <div>
           author
-          <input {...authorField} />
+          <input {...authorField.field()} />
         </div>
         <div>
           url for more info
-          <input {...infoField} />
+          <input {...infoField.field()} />
         </div>
         <button type='submit'>create</button>
         <button type='reset'>reset</button>
