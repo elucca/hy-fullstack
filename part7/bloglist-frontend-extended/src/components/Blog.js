@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import PropTypes from 'prop-types'
+import React, { useState } from "react"
+import PropTypes from "prop-types"
 
 const Blog = ({ blog, likeBlog, deleteBlog, loggedInUser }) => {
   const [showDetailed, setShowDetailed] = useState(false)
@@ -7,7 +7,7 @@ const Blog = ({ blog, likeBlog, deleteBlog, loggedInUser }) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
-    border: 'solid',
+    border: "solid",
     borderWidth: 1,
     marginBottom: 5,
   }
@@ -18,7 +18,7 @@ const Blog = ({ blog, likeBlog, deleteBlog, loggedInUser }) => {
 
   const deleteButton = () => {
     return (
-      <button id='delete-blog-button' onClick={handleDelete}>
+      <button id="delete-blog-button" onClick={handleDelete}>
         Delete
       </button>
     )
@@ -42,13 +42,13 @@ const Blog = ({ blog, likeBlog, deleteBlog, loggedInUser }) => {
     // Presence of the delete button should really be based on id, not username
     // Requires change to backend to return the id
     return (
-      <div id='detailed-blog' style={blogStyle}>
+      <div id="detailed-blog" style={blogStyle}>
         {blog.title} by {blog.author} &nbsp;
         <button onClick={toggleShowDetailed}>Hide</button>
         <br></br>
         {blog.url} <br></br>
         Likes: {blog.likes} &nbsp;
-        <button id='like-button' onClick={handleLike}>
+        <button id="like-button" onClick={handleLike}>
           Like
         </button>
         <br></br>
@@ -59,9 +59,9 @@ const Blog = ({ blog, likeBlog, deleteBlog, loggedInUser }) => {
     )
   } else {
     return (
-      <div id='blog' style={blogStyle}>
+      <div id="blog" style={blogStyle}>
         {blog.title} by {blog.author} &nbsp;
-        <button id='show-blog-button' onClick={toggleShowDetailed}>
+        <button id="show-blog-button" onClick={toggleShowDetailed}>
           Show
         </button>
       </div>

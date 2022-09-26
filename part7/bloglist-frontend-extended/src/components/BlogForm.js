@@ -1,13 +1,13 @@
-import React, { useState } from 'react'
-import PropTypes from 'prop-types'
+import React, { useState } from "react"
+import PropTypes from "prop-types"
 
 const BlogForm = ({ createBlog }) => {
-  const [newTitle, setNewTitle] = useState('')
-  const [newAuthor, setNewAuthor] = useState('')
-  const [newUrl, setNewUrl] = useState('')
-  const [newLikes, setNewLikes] = useState('')
+  const [newTitle, setNewTitle] = useState("")
+  const [newAuthor, setNewAuthor] = useState("")
+  const [newUrl, setNewUrl] = useState("")
+  const [newLikes, setNewLikes] = useState("")
 
-  const addBlog = event => {
+  const addBlog = (event) => {
     event.preventDefault()
 
     const newBlog = {
@@ -19,19 +19,19 @@ const BlogForm = ({ createBlog }) => {
 
     createBlog(newBlog)
 
-    setNewTitle('')
-    setNewAuthor('')
-    setNewUrl('')
-    setNewLikes('')
+    setNewTitle("")
+    setNewAuthor("")
+    setNewUrl("")
+    setNewLikes("")
   }
 
   return (
-    <form onSubmit={addBlog} id='form'>
+    <form onSubmit={addBlog} id="form">
       <h3>Add blog</h3>
       <div>
         Title &nbsp;
         <input
-          id='title'
+          id="title"
           value={newTitle}
           onChange={({ target }) => setNewTitle(target.value)}
         />
@@ -40,7 +40,7 @@ const BlogForm = ({ createBlog }) => {
       <div>
         Author &nbsp;
         <input
-          id='author'
+          id="author"
           value={newAuthor}
           onChange={({ target }) => setNewAuthor(target.value)}
         />
@@ -49,7 +49,7 @@ const BlogForm = ({ createBlog }) => {
       <div>
         URL &nbsp;
         <input
-          id='url'
+          id="url"
           value={newUrl}
           onChange={({ target }) => setNewUrl(target.value)}
         />
@@ -58,12 +58,12 @@ const BlogForm = ({ createBlog }) => {
       <div>
         Likes &nbsp;
         <input
-          id='likes'
+          id="likes"
           value={newLikes}
           onChange={({ target }) => setNewLikes(target.value)}
         />
       </div>
-      <button id='submit-blog-button' type='submit'>
+      <button id="submit-blog-button" type="submit">
         Add
       </button>
     </form>

@@ -1,28 +1,28 @@
-import React, { useState, useEffect, useRef } from 'react'
-import Blog from './components/Blog'
+import React, { useState, useEffect, useRef } from "react"
+import Blog from "./components/Blog"
 
-import Notification from './components/Notification'
-import Togglable from './components/Togglable'
-import BlogForm from './components/BlogForm'
+import Notification from "./components/Notification"
+import Togglable from "./components/Togglable"
+import BlogForm from "./components/BlogForm"
 
-import blogService from './services/blogs'
-import loginService from './services/login'
+import blogService from "./services/blogs"
+import loginService from "./services/login"
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
+  const [username, setUsername] = useState("")
+  const [password, setPassword] = useState("")
   const [notification, setNotification] = useState(null)
   const [user, setUser] = useState(null)
 
   const blogFormRef = useRef()
 
   useEffect(() => {
-    blogService.getAll().then(blogs => setBlogs(sortBlogs(blogs)))
+    blogService.getAll().then((blogs) => setBlogs(sortBlogs(blogs)))
   }, [])
 
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedBloglistUser')
+    const loggedUserJSON = window.localStorage.getItem("loggedBloglistUser")
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
@@ -30,27 +30,27 @@ const App = () => {
     }
   }, [])
 
-  const sortBlogs = blogsToSort => {
+  const sortBlogs = (blogsToSort) => {
     // Should just use this to set state and never call that anywhere so I wouldn't
     // need to manually remember to sort every time I change the blogs array.
     return blogsToSort.sort((a, b) => (a.likes < b.likes ? 1 : -1))
   }
 
-  const handleLogin = async event => {
+  const handleLogin = async (event) => {
     event.preventDefault()
 
     try {
       const user = await loginService.login({ username, password })
 
-      window.localStorage.setItem('loggedBloglistUser', JSON.stringify(user))
+      window.localStorage.setItem("loggedBloglistUser", JSON.stringify(user))
       blogService.setToken(user.token)
 
       setUser(user)
-      setUsername('')
-      setPassword('')
+      setUsername("")
+      setPassword("")
     } catch (exception) {
       console.log(exception)
-      setNotification('Invalid username or password')
+      setNotification("Invalid username or password")
       setTimeout(() => {
         setNotification(null)
       }, 3000)
@@ -58,11 +58,11 @@ const App = () => {
   }
 
   const handleLogout = async () => {
-    window.localStorage.removeItem('loggedBloglistUser')
+    window.localStorage.removeItem("loggedBloglistUser")
     setUser(null)
   }
 
-  const createBlog = async newBlog => {
+  const createBlog = async (newBlog) => {
     blogFormRef.current.toggleVisibility()
 
     const createdBlog = await blogService.create(newBlog)
@@ -75,11 +75,11 @@ const App = () => {
     }, 3000)
   }
 
-  const deleteBlog = async blogToDelete => {
+  const deleteBlog = async (blogToDelete) => {
     try {
       await blogService.remove(blogToDelete)
       setNotification(`Removed blog: "${blogToDelete.title}".`)
-      setBlogs(sortBlogs(blogs.filter(blog => blog.id !== blogToDelete.id)))
+      setBlogs(sortBlogs(blogs.filter((blog) => blog.id !== blogToDelete.id)))
     } catch {
       setNotification(
         `Cannot remove blog: "${blogToDelete.title}" belongs to another user.`
@@ -87,7 +87,7 @@ const App = () => {
     }
   }
 
-  const likeBlog = async blogToUpdate => {
+  const likeBlog = async (blogToUpdate) => {
     const updatedBlog = {
       id: blogToUpdate.id,
       user: blogToUpdate.user,
@@ -100,23 +100,23 @@ const App = () => {
     await blogService.update(updatedBlog)
 
     // janky update to displayed blog
-    const newBlogs = blogs.filter(blog => blog.id !== blogToUpdate.id)
+    const newBlogs = blogs.filter((blog) => blog.id !== blogToUpdate.id)
     setBlogs(sortBlogs(newBlogs.concat(updatedBlog)))
   }
 
   const loginForm = () => {
     return (
-      <div id='login-form'>
+      <div id="login-form">
         <h2>Login</h2>
         <Notification message={notification} />
         <form onSubmit={handleLogin}>
           <div>
             Username &nbsp;
             <input
-              id='username'
-              type='text'
+              id="username"
+              type="text"
               value={username}
-              name='Username'
+              name="Username"
               onChange={({ target }) => setUsername(target.value)}
             />
           </div>
@@ -124,15 +124,15 @@ const App = () => {
           <div>
             Password &nbsp;
             <input
-              id='password'
-              type='password'
+              id="password"
+              type="password"
               value={password}
-              name='Password'
+              name="Password"
               onChange={({ target }) => setPassword(target.value)}
             />
           </div>
 
-          <button id='login-button' type='submit'>
+          <button id="login-button" type="submit">
             Login
           </button>
         </form>
@@ -148,8 +148,8 @@ const App = () => {
         <Notification message={notification} />
         <button onClick={() => handleLogout()}>Logout</button>
         {blogForm()}
-        <div id='blog-list'>
-          {blogs.map(blog => (
+        <div id="blog-list">
+          {blogs.map((blog) => (
             <Blog
               key={blog.id}
               blog={blog}
@@ -164,7 +164,7 @@ const App = () => {
   }
 
   const blogForm = () => (
-    <Togglable buttonLabel='Add blog' ref={blogFormRef}>
+    <Togglable buttonLabel="Add blog" ref={blogFormRef}>
       <BlogForm createBlog={createBlog} />
     </Togglable>
   )
