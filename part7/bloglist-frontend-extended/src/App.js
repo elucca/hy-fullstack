@@ -8,11 +8,15 @@ import BlogForm from "./components/BlogForm"
 import blogService from "./services/blogs"
 import loginService from "./services/login"
 
+import { useDispatch } from "react-redux"
+import { changeNotification } from "./reducers/notificationReducer"
+
 const App = () => {
+  const dispatch = useDispatch()
+
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
-  const [notification, setNotification] = useState(null)
   const [user, setUser] = useState(null)
 
   const blogFormRef = useRef()
@@ -50,10 +54,7 @@ const App = () => {
       setPassword("")
     } catch (exception) {
       console.log(exception)
-      setNotification("Invalid username or password")
-      setTimeout(() => {
-        setNotification(null)
-      }, 3000)
+      dispatch(changeNotification("Invalid username or password", 4000))
     }
   }
 
@@ -69,20 +70,27 @@ const App = () => {
     setBlogs(sortBlogs(blogs.concat(createdBlog)))
     console.log(createdBlog)
 
-    setNotification(`Added new blog: ${newBlog.title} by ${newBlog.author}`)
-    setTimeout(() => {
-      setNotification(null)
-    }, 3000)
+    dispatch(
+      changeNotification(
+        `Added new blog: ${newBlog.title} by ${newBlog.author}`,
+        4000
+      )
+    )
   }
 
   const deleteBlog = async (blogToDelete) => {
     try {
       await blogService.remove(blogToDelete)
-      setNotification(`Removed blog: "${blogToDelete.title}".`)
+      dispatch(
+        changeNotification(`Removed blog: "${blogToDelete.title}".`, 4000)
+      )
       setBlogs(sortBlogs(blogs.filter((blog) => blog.id !== blogToDelete.id)))
     } catch {
-      setNotification(
-        `Cannot remove blog: "${blogToDelete.title}" belongs to another user.`
+      dispatch(
+        changeNotification(
+          `Cannot remove blog: "${blogToDelete.title}" belongs to another user.`,
+          4000
+        )
       )
     }
   }
@@ -108,7 +116,7 @@ const App = () => {
     return (
       <div id="login-form">
         <h2>Login</h2>
-        <Notification message={notification} />
+        <Notification />
         <form onSubmit={handleLogin}>
           <div>
             Username &nbsp;
@@ -145,7 +153,7 @@ const App = () => {
       <div>
         <h2>Blogs</h2>
         <p>Logged in as {user.name} &nbsp;</p>
-        <Notification message={notification} />
+        <Notification />
         <button onClick={() => handleLogout()}>Logout</button>
         {blogForm()}
         <div id="blog-list">
