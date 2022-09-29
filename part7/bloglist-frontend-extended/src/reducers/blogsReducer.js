@@ -6,7 +6,6 @@ const blogsReducer = (state = [], action) => {
     case "ADD_BLOG":
       return state.concat(action.data)
     case "DELETE_BLOG":
-      //fix
       return state.filter((blog) => blog.id !== action.data.id)
     default:
       return state
