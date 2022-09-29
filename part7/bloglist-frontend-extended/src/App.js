@@ -69,7 +69,7 @@ const App = () => {
     blogFormRef.current.toggleVisibility()
 
     const createdBlog = await blogService.create(newBlog)
-    dispatch(addBlog(newBlog))
+    dispatch(addBlog(createdBlog))
 
     dispatch(
       changeNotification(
@@ -80,13 +80,12 @@ const App = () => {
   }
 
   const deleteBlog = async (blogToDelete) => {
-    /*
     try {
       await blogService.remove(blogToDelete)
       dispatch(
         changeNotification(`Removed blog: "${blogToDelete.title}".`, 4000)
       )
-      setBlogs(sortBlogs(blogs.filter((blog) => blog.id !== blogToDelete.id)))
+      dispatch(deleteBlog(blogToDelete))
     } catch {
       dispatch(
         changeNotification(
@@ -95,11 +94,10 @@ const App = () => {
         )
       )
     }
-    */
   }
+  
 
   const likeBlog = async (blogToUpdate) => {
-    /*
     const updatedBlog = {
       id: blogToUpdate.id,
       user: blogToUpdate.user,
@@ -111,10 +109,10 @@ const App = () => {
 
     await blogService.update(updatedBlog)
 
-    // janky update to displayed blog
+    // Janky bad state update
     const newBlogs = blogs.filter((blog) => blog.id !== blogToUpdate.id)
-    setBlogs(sortBlogs(newBlogs.concat(updatedBlog)))
-    */
+    newBlogs.push(updatedBlog)
+    dispatch(initializeBlogs(newBlogs))
   }
 
   const loginForm = () => {

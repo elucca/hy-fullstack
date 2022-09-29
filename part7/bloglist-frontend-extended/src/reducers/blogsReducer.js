@@ -5,8 +5,18 @@ const blogsReducer = (state = [], action) => {
       return state
     case "ADD_BLOG":
       return state.concat(action.data)
+    case "DELETE_BLOG":
+      //fix
+      return state.filter((blog) => blog.id !== action.data.id)
     default:
       return state
+  }
+}
+
+export const initializeBlogs = (blogs) => {
+  return {
+    type: "INITIALIZE_BLOGS",
+    data: blogs,
   }
 }
 
@@ -17,10 +27,10 @@ export const addBlog = (blog) => {
   }
 }
 
-export const initializeBlogs = (blogs) => {
+export const deleteBlog = (blog) => {
   return {
-    type: "INITIALIZE_BLOGS",
-    data: blogs
+    type: "DELETE_BLOG",
+    data: blog,
   }
 }
 
