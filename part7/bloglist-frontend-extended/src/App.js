@@ -11,7 +11,7 @@ import loginService from "./services/login"
 
 import { useDispatch } from "react-redux"
 import { changeNotification } from "./reducers/notificationReducer"
-import { addBlog, initializeBlogs } from "./reducers/blogsReducer"
+import { addBlog, initializeBlogs, removeBlog } from "./reducers/blogsReducer"
 
 const App = () => {
   const dispatch = useDispatch()
@@ -85,7 +85,7 @@ const App = () => {
       dispatch(
         changeNotification(`Removed blog: "${blogToDelete.title}".`, 4000)
       )
-      dispatch(deleteBlog(blogToDelete))
+      dispatch(removeBlog(blogToDelete))
     } catch {
       dispatch(
         changeNotification(

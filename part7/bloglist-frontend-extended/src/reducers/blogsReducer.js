@@ -27,7 +27,7 @@ export const addBlog = (blog) => {
   }
 }
 
-export const deleteBlog = (blog) => {
+export const removeBlog = (blog) => {
   return {
     type: "DELETE_BLOG",
     data: blog,
