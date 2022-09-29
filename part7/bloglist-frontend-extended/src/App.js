@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react"
+import { useSelector } from "react-redux"
 import Blog from "./components/Blog"
 
 import Notification from "./components/Notification"
@@ -10,11 +11,17 @@ import loginService from "./services/login"
 
 import { useDispatch } from "react-redux"
 import { changeNotification } from "./reducers/notificationReducer"
+import { addBlog, initializeBlogs } from "./reducers/blogsReducer"
 
 const App = () => {
   const dispatch = useDispatch()
 
-  const [blogs, setBlogs] = useState([])
+  const sortBlogs = (blogsToSort) => {
+    return blogsToSort.sort((a, b) => (a.likes < b.likes ? 1 : -1))
+  }
+
+  const blogs = useSelector(state => sortBlogs(state.blogs))
+
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [user, setUser] = useState(null)
@@ -22,7 +29,7 @@ const App = () => {
   const blogFormRef = useRef()
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(sortBlogs(blogs)))
+    blogService.getAll().then((blogs) => dispatch(initializeBlogs(sortBlogs(blogs))))
   }, [])
 
   useEffect(() => {
@@ -34,11 +41,6 @@ const App = () => {
     }
   }, [])
 
-  const sortBlogs = (blogsToSort) => {
-    // Should just use this to set state and never call that anywhere so I wouldn't
-    // need to manually remember to sort every time I change the blogs array.
-    return blogsToSort.sort((a, b) => (a.likes < b.likes ? 1 : -1))
-  }
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -67,8 +69,7 @@ const App = () => {
     blogFormRef.current.toggleVisibility()
 
     const createdBlog = await blogService.create(newBlog)
-    setBlogs(sortBlogs(blogs.concat(createdBlog)))
-    console.log(createdBlog)
+    dispatch(addBlog(newBlog))
 
     dispatch(
       changeNotification(
@@ -79,6 +80,7 @@ const App = () => {
   }
 
   const deleteBlog = async (blogToDelete) => {
+    /*
     try {
       await blogService.remove(blogToDelete)
       dispatch(
@@ -93,9 +95,11 @@ const App = () => {
         )
       )
     }
+    */
   }
 
   const likeBlog = async (blogToUpdate) => {
+    /*
     const updatedBlog = {
       id: blogToUpdate.id,
       user: blogToUpdate.user,
@@ -110,6 +114,7 @@ const App = () => {
     // janky update to displayed blog
     const newBlogs = blogs.filter((blog) => blog.id !== blogToUpdate.id)
     setBlogs(sortBlogs(newBlogs.concat(updatedBlog)))
+    */
   }
 
   const loginForm = () => {
