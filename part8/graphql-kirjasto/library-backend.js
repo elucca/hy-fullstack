@@ -1,5 +1,6 @@
 const { ApolloServer } = require('@apollo/server')
 const { startStandaloneServer } = require('@apollo/server/standalone')
+const { v1: uuid } = require('uuid')
 
 let authors = [
   {
@@ -17,11 +18,11 @@ let authors = [
     id: "afa5b6f1-344d-11e9-a414-719c6709cf3e",
     born: 1821
   },
-  { 
+  {
     name: 'Joshua Kerievsky', // birthyear not known
     id: "afa5b6f2-344d-11e9-a414-719c6709cf3e",
   },
-  { 
+  {
     name: 'Sandi Metz', // birthyear not known
     id: "afa5b6f3-344d-11e9-a414-719c6709cf3e",
   },
@@ -69,7 +70,7 @@ let books = [
     author: 'Joshua Kerievsky',
     id: "afa5de01-344d-11e9-a414-719c6709cf3e",
     genres: ['refactoring', 'patterns']
-  },  
+  },
   {
     title: 'Practical Object-Oriented Design, An Agile Primer Using Ruby',
     published: 2012,
@@ -99,6 +100,15 @@ const typeDefs = `
     authorCount: Int!
     allBooks(author: String, genre: String): [Book]!
     allAuthors: [Author]!
+  }
+
+  type Mutation {
+    addBook(
+      title: String!
+      published: String!
+      author: String!
+      genres: [String!]!
+    ): Book
   }
 
   type Book {
@@ -131,7 +141,19 @@ const resolvers = {
       }
       return books
     },
-    allAuthors: () => authors.map(author => ({ ...author, bookCount: books.filter(book => book.author === author.name).length}))
+    allAuthors: () => authors.map(author => ({ ...author, bookCount: books.filter(book => book.author === author.name).length }))
+  },
+
+  Mutation: {
+    addBook: (root, args) => {
+      author = args.author
+      if (!authors.find(a => a.name === author)) {
+        authors = authors.concat({ name: author, id: uuid() })
+      }
+      const book = { ...args, id: uuid() }
+      books = books.concat(book)
+      return book
+    }
   }
 }
 
