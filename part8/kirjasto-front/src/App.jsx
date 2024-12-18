@@ -52,4 +52,4 @@ const App = () => {
 };
 
 export default App;
-export { ALL_BOOKS }
+export { ALL_BOOKS, ALL_AUTHORS }
