@@ -52,3 +52,4 @@ const App = () => {
 };
 
 export default App;
+export { ALL_BOOKS }
