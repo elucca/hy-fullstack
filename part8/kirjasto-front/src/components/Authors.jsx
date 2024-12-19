@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import Select from 'react-select';
 import { gql, useMutation } from '@apollo/client'
 import { ALL_AUTHORS } from '../App'
 
@@ -15,8 +16,8 @@ const UPDATE_AUTHOR = gql`
 `
 
 const Authors = (props) => {
-  const [author, setAuthor] = useState('')
   const [birthYear, setBirthYear] = useState('')
+  const [selectedAuthor, setSelectedAuthor] = useState('');
 
   const authors = props.authors
 
@@ -30,15 +31,10 @@ const Authors = (props) => {
 
   const submit = async (event) => {
     event.preventDefault()
-    console.log(typeof birthYear)
-    console.log(birthYear)
-    console.log(typeof author)
-    console.log(author)
-    editAuthor({ variables: { author, birthYear } })
+    editAuthor({ variables: { author: selectedAuthor.value, birthYear } })
 
     console.log('update author...')
 
-    setAuthor('')
     setBirthYear('')
   }
 
@@ -68,10 +64,10 @@ const Authors = (props) => {
         <form onSubmit={submit}>
           <h3>Set birth year</h3>
           <div>
-            name
-            <input
-              value={author}
-              onChange={({ target }) => setAuthor(target.value)}
+            <Select
+              defaultValue={selectedAuthor}
+              onChange={setSelectedAuthor}
+              options={ authors.map(a => ( {value: a.name, label: a.name})) }
             />
           </div>
           <div>
