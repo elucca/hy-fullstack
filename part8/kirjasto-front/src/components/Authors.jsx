@@ -3,10 +3,10 @@ import { gql, useMutation } from '@apollo/client'
 import { ALL_AUTHORS } from '../App'
 
 const UPDATE_AUTHOR = gql`
-  mutation($author: String!, $setBorn: String!) {
+  mutation($author: String!, $birthYear: String!) {
     editAuthor( 
       name: $author,
-      setBornTo: $setBorn
+      setBornTo: $birthYear
     ) {
       name
       born
