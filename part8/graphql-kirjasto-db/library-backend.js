@@ -1,6 +1,6 @@
 const { ApolloServer } = require('@apollo/server')
 const { startStandaloneServer } = require('@apollo/server/standalone')
-const { v1: uuid } = require('uuid')
+const { GraphQLError } = require('graphql')
 
 const mongoose = require('mongoose')
 mongoose.set('strictQuery', false)
@@ -103,6 +103,18 @@ const resolvers = {
 
   Mutation: {
     addBook: async (root, args) => {
+      if (args.title.length < 5) {
+        throw new GraphQLError('Book title must be 5 or more characters.', {
+          invalidArgs: args.title,
+        })
+      }
+
+      if (args.author.length < 4) {
+        throw new GraphQLError('Author name must be 4 or more characters.', {
+          invalidArgs: args.author,
+        })
+      }
+
       let a = await Author.findOne({ name: args.author })
       if (!a) {
         a = new Author({ name: args.author })
@@ -124,6 +136,12 @@ const resolvers = {
       if (!a) {
         throw new GraphQLError('Author to update not found.', {
           invalidArgs: args.name,
+        })
+      }
+
+      if (isNaN(parseInt(args.setBornTo))) {
+        throw new GraphQLError('Please provide a valid birth year.', {
+          invalidArgs: args.setBornTo,
         })
       }
 
