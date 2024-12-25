@@ -61,16 +61,26 @@ const typeDefs = `
 const resolvers = {
   Query: {
     bookCount: async () => Book.collection.countDocuments(),
-    authorCount: async () => Author.collection.countDocumetns(),
+    authorCount: async () => Author.collection.countDocuments(),
     allBooks: async () => Book.find({}),
     allAuthors: async () => Author.find({})
   },
 
   Mutation: {
     addBook: async (root, args) => {
-      const book = new Book({ ...args })
-      const a = new Author({ name: args.author })
-      await a.save()
+      let a = await Author.findOne({name: args.author})
+      if (!a) {
+        a = new Author({ name: args.author })
+        await a.save()  
+      }
+
+      const book = new Book({
+        title: args.title,
+        author: a._id,
+        published: args.published,
+        genres: args.genres
+      })
+
       return book.save()
     },
     editAuthor: () => {}
