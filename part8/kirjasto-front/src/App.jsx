@@ -16,13 +16,17 @@ const ALL_AUTHORS = gql`
 `
 
 const ALL_BOOKS = gql`
-query {
-    allBooks {
-      title
-      author
-      published
+query { 
+  allBooks {
+    title
+    author {
+      name
+      born
     }
+    published
+    genres
   }
+}
 `
 
 const App = () => {
