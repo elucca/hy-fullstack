@@ -171,6 +171,7 @@ const resolvers = {
     },
 
     editAuthor: async (root, args, context) => {
+      const currentUser = context.currentUser
 
       if (!currentUser) {
         throw new GraphQLError('User is not authenticated.', {
