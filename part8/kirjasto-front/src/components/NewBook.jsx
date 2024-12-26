@@ -3,22 +3,30 @@ import { gql, useMutation } from '@apollo/client'
 import { ALL_BOOKS } from '../App'
 
 const ADD_BOOK = gql`
-  mutation addBook($title: String!, $published: Int!, $author: String!, $genres: [String!]!) {
+  mutation createBook(
+    $title: String!
+    $author: String!
+    $published: Int!
+    $genres: [String!]!
+  ) {
     addBook(
-      title: $title,
-      published: $published,
-      author: $author,
+      title: $title
+      author: $author
+      published: $published
       genres: $genres
     ) {
       title
-      author
+      author {
+        name
+        born
+      }
+      published
       genres
-      id
     }
   }
 `
 
-const NewBook = (props) => {
+const NewBook = props => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [published, setPublished] = useState('')
@@ -26,14 +34,14 @@ const NewBook = (props) => {
   const [genres, setGenres] = useState([])
 
   const [addBook] = useMutation(ADD_BOOK, {
-    refetchQueries: [{ query: ALL_BOOKS }]
+    refetchQueries: [{ query: ALL_BOOKS }],
   })
 
   if (!props.show) {
     return null
   }
 
-  const submit = async (event) => {
+  const submit = async event => {
     event.preventDefault()
 
     addBook({ variables: { title, published, author, genres } })
@@ -72,7 +80,7 @@ const NewBook = (props) => {
         <div>
           published
           <input
-            type="number"
+            type='number'
             value={published}
             onChange={({ target }) => setPublished(parseInt(target.value))}
           />
@@ -82,12 +90,12 @@ const NewBook = (props) => {
             value={genre}
             onChange={({ target }) => setGenre(target.value)}
           />
-          <button onClick={addGenre} type="button">
+          <button onClick={addGenre} type='button'>
             add genre
           </button>
         </div>
         <div>genres: {genres.join(' ')}</div>
-        <button type="submit">create book</button>
+        <button type='submit'>create book</button>
       </form>
     </div>
   )
