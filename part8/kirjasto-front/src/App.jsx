@@ -28,6 +28,20 @@ const ALL_BOOKS = gql`
     }
   }
 `
+const GENRE_BOOKS = gql`
+  query bookByGenre($genre: String!) {
+    allBooks(genre: $genre) {
+      title
+      author {
+        name
+        born
+      }
+      published
+      genres
+    }
+  }
+`
+
 export const LOGIN = gql`
   mutation login($username: String!, $password: String!) {
     login(username: $username, password: $password) {
@@ -41,8 +55,6 @@ const App = () => {
   const [page, setPage] = useState('authors')
   const [loggedIn, setLoggedIn] = useState(false)
   const authorsRes = useQuery(ALL_AUTHORS)
-  const booksRes = useQuery(ALL_BOOKS)
-
   const client = useApolloClient()
 
   const logout = () => {
@@ -52,7 +64,7 @@ const App = () => {
     client.resetStore()
   }
 
-  if (authorsRes.loading || booksRes.loading) {
+  if (authorsRes.loading) {
     return <div>Loading...</div>
   }
 
@@ -68,9 +80,12 @@ const App = () => {
 
       <Authors show={page === 'authors'} authors={authorsRes.data.allAuthors} />
 
-      <Books show={page === 'books'} books={booksRes.data.allBooks} />
+      <Books
+        show={page === 'books'}
+        genreQuery={GENRE_BOOKS}
+      />
 
-      <NewBook show={page === 'add'}} />
+      <NewBook show={page === 'add'} />
 
       <LoginForm
         show={page === 'login'}
@@ -83,7 +98,7 @@ const App = () => {
   )
 }
 
-const LogoutButton = ({loggedIn, logout}) => {
+const LogoutButton = ({ loggedIn, logout }) => {
   if (!loggedIn) {
     return null
   }
