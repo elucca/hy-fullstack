@@ -117,4 +117,4 @@ const LogoutButton = ({ loggedIn, logout }) => {
 }
 
 export default App
-export { ALL_BOOKS, ALL_AUTHORS }
+export { ALL_BOOKS, GENRE_BOOKS, ALL_AUTHORS }
